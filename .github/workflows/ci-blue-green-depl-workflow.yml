@@ -112,12 +112,11 @@ jobs:
         cd k8s
         kubectl apply -f app-v1.yaml
         kubectl apply -f app-v2.yaml
-        kubectl rollout status deploy hello-gitops-v2 -w
         kubectl patch service hello-gitops -p '{"spec":{"selector":{"version":"v2.0.0"}}}'
     # REMOVE OLD DEPLOYMENT!!
     - name: Remove old (blue) deployment
       run: |
-        kubectl delete deploy my-app-v1
+        kubectl delete deploy hello-gitops-v1
  
     - name: Commit files
       run: |
