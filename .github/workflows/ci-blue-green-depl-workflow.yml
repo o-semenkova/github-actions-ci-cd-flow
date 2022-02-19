@@ -98,28 +98,6 @@ jobs:
     - name: Get the GKE credentials so we can deploy to the cluster
       run: |
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
-#     - name: Create namespace & set in Kustomize
-#       run: |
-#          namespacePresentBlue=`kubectl get ns | grep python-app-blue | wc -l`
-#          namespacePresentGreen=`kubectl get ns | grep python-app-green | wc -l`
-#          if [ $namespacePresentBlue -eq 0 ]
-#          then
-#             kubectl create ns python-app-blue
-#             cd k8s
-#             kustomize edit set namespace python-app-blue
-#             echo "NEW_NAMESPACE=python-app-blue" >> $GITHUB_ENV
-#             echo "OLD_NAMESPACE=python-app-green" >> $GITHUB_ENV
-#          elif [ $namespacePresentGreen -eq 0 ]
-#          then
-#             kubectl create ns python-app-green
-#             cd k8s
-#             kustomize edit set namespace python-app-green
-#             echo "NEW_NAMESPACE=python-app-green" >> $GITHUB_ENV
-#             echo "OLD_NAMESPACE=python-app-blue" >> $GITHUB_ENV
-#          else
-#             echo "Both Blue and Green namespaces are present! Exiting"
-#             exit 1
-#          fi
 
     - name: Update Kubernetes resources
       env:
@@ -131,13 +109,14 @@ jobs:
     
     - name: Deploy updated Kubernetes resources
       run: |
+        cd k8s
         kubectl apply -f app-v1.yaml 
         watch kubectl get po
         kubectl apply -f app-v2.yaml
         kubectl rollout status deploy my-app-v2 -w
         kubectl patch service my-app -p '{"spec":{"selector":{"version":"v2.0.0"}}}'
     # REMOVE OLD DEPLOYMENT!!
-    - name: Remove old namespace
+    - name: Remove old (blue) deployment
       run: |
         kubectl delete deploy my-app-v1
  
