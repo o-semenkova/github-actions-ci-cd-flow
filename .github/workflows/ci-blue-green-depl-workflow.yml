@@ -63,7 +63,7 @@ jobs:
         file: ./app/Dockerfile
         builder: ${{ steps.buildx.outputs.name }}
         push: true
-        tags: hello-gitops:${{ github.sha }}, ${{ secrets.DOCKER_USERNAME }}/hello-gitops:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/hello-gitops:${{ github.sha }}, ${{ secrets.DOCKER_USERNAME }}/hello-gitops:latest
         cache-from: type=local,src=/tmp/.buildx-cache
         cache-to: type=local,dest=/tmp/.buildx-cache
 
@@ -112,7 +112,6 @@ jobs:
         cd k8s
         kubectl apply -f app-v1.yaml
         kubectl apply -f app-v2.yaml
-        kubectl rollout status deploy hello-gitops-v2 -w
         kubectl patch service hello-gitops -p '{"spec":{"selector":{"version":"v2.0.0"}}}'
         
     - name: Remove old (blue) deployment
