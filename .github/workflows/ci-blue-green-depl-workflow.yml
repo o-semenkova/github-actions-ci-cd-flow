@@ -74,8 +74,8 @@ jobs:
     
     env:
       PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-      GKE_ZONE: ${{ secrets.GKE_ZONE }}
+      GKE_CLUSTER: osem-gke-cluster-1
+      GKE_ZONE: us-central1-1
 
     steps:
     - name: Check out code
