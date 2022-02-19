@@ -8,4 +8,4 @@ namespace: hello-gitops
 images:
 - name: hello-gitops
   newName: semeok/hello-gitops
-  newTag: fb8a2883445a9d2575c50d135270db1b790d9d1d
+  newTag: 57be2ab1488d2be3c34f71e7ea6f3ee9ca7ed7e6
